@@ -1,12 +1,19 @@
 from fastapi import FastAPI
-from Utils.JSONCreator import getJsonFromArray
+
+from model.DataStructure import DataStructure
+from utils.JSONCreator import toJson
+from utils.ReponseBuilder import buildResponse
+from model import APIStatus
 
 app = FastAPI()
 
 
-@app.get("/get_data_structures")
-async def datastructures():
-    return getJsonFromArray(["stack", "queue", "array", "arraylist", "linkedlist", "tree", "trie", "graph"])
+@app.get("/data_structures")
+async def getAllDataStructure():
+    dataStructures = []
+    for dataStructure in DataStructure:
+        dataStructures.append(dataStructure.id)
+    return buildResponse(APIStatus.APIStatus.SUCCESS, dataStructures)
 
 @app.get("/data_structure/{name}")
 async def data_structure(name: str):
